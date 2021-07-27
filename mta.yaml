@@ -46,7 +46,7 @@ resources:
  - name: hdi_db
    parameters:
       config:
-         schema: ZTABLECREATOR
+         schema: ZZTABLECREATOR
          makeUniqueName: false
    properties:
       hdi-container-name: ${service-name}
