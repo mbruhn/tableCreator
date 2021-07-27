@@ -1,0 +1,46 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+	<edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
+		<Schema xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
+			xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm"
+			Namespace="default">
+			<EntityType Name="tablesType">
+				<Key>
+					<PropertyRef Name="key.tableName"/>
+				</Key>
+				<Property Name="key.tableName" Type="Edm.String" Nullable="false" MaxLength="127"/>
+				<Property Name="data.schemaName" Type="Edm.String" MaxLength="127"/>
+				<Property Name="data.realName" Type="Edm.String" MaxLength="127"/>
+				<Property Name="data.description" Type="Edm.String" MaxLength="2147483647"/>
+				<Property Name="flags.canBeExposed" Type="Edm.Int32"/>
+				<Property Name="flags.exposed" Type="Edm.Int32"/>
+				<Property Name="flags.locked" Type="Edm.Int32"/>
+				<NavigationProperty Name="tablefields" Relationship="default.ColumnsType" FromRole="tablesPrincipal" ToRole="tablefieldsDependent"/>
+			</EntityType>
+			<EntityType Name="tablefieldsType">
+				<Key>
+					<PropertyRef Name="key.tableName"/>
+					<PropertyRef Name="key.fieldName"/>
+				</Key>
+				<Property Name="key.tableName" Type="Edm.String" Nullable="false" MaxLength="127"/>
+				<Property Name="key.fieldName" Type="Edm.String" Nullable="false" MaxLength="127"/>
+				<Property Name="data.pos" Type="Edm.Int32"/>
+				<Property Name="data.isAKey" Type="Edm.Int32"/>
+				<Property Name="data.description" Type="Edm.String" MaxLength="2147483647"/>
+				<Property Name="data.dataType" Type="Edm.String" MaxLength="127"/>
+				<Property Name="data.dataScale" Type="Edm.String" MaxLength="127"/>
+			</EntityType>
+			<Association Name="ColumnsType">
+				<End Type="default.tablesType" Role="tablesPrincipal" Multiplicity="1"/>
+				<End Type="default.tablefieldsType" Role="tablefieldsDependent" Multiplicity="*"/>
+			</Association>
+			<EntityContainer Name="v2" m:IsDefaultEntityContainer="true">
+				<EntitySet Name="tables" EntityType="default.tablesType"/>
+				<EntitySet Name="tablefields" EntityType="default.tablefieldsType"/>
+				<AssociationSet Name="Columns" Association="default.ColumnsType">
+					<End Role="tablesPrincipal" EntitySet="tables"/>
+					<End Role="tablefieldsDependent" EntitySet="tablefields"/>
+				</AssociationSet>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

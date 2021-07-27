@@ -1,0 +1,16 @@
+LIBRARY "team" 
+	LANGUAGE SQLSCRIPT AS
+	BEGIN
+
+	/*Create team and manager */
+	  PUBLIC PROCEDURE "create" ( in team  "aclmodel.tt_teamcreation_in" )
+		LANGUAGE SQLSCRIPT
+		SQL SECURITY DEFINER AS
+		BEGIN
+			-- :teamid;
+            --t1 = select key.teamID from dummy;
+            --upsert "coremodel.teamACL"       
+
+     
+		END;
+	END;

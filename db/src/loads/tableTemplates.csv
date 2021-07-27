@@ -1,0 +1,4 @@
+keys.templateName,data.hanaTableType,data.description,flags.insertAllowed,flags.readAllowed,flags.updateAllowed,flags.deleteAllowed,flags.temporary
+Fixed,column,"Fixed table only for insert and reads",1,1,0,0,0
+Standard,column,"Standard Deletion not allowed",1,1,1,0,0
+Cached,column,"Temporary table full CRUD",1,1,1,1,1

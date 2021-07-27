@@ -1,0 +1,5 @@
+{
+  "welcomeFile": "webapp/index.html",
+  "authenticationMethod": "none",
+  "routes": [{ "source": "/tablefields.xsodata/", "destination": "nodejs_be" }, { "source": "/configelements.xsodata/", "destination": "nodejs_be" }]
+}

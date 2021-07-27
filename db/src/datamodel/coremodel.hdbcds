@@ -1,0 +1,110 @@
+using core;
+
+context coremodel {
+
+
+@comment : 'Table definition header key elements'
+type _tableDefinitionHeader_keys 
+{
+    @Comment : 'Table Name identifier within the lake'
+    tableName        : core._id;
+};
+
+@comment : 'Table definition header key elements'
+type _tableDefinitionHeader_flags 
+{
+    @Comment : 'Table can be exposed in hub'
+    canBeExposed : core._byte;
+
+    @Comment : 'Table is exposed in hub'
+    exposed      : core._byte;
+
+    @Comment : 'Table is locked for changes'
+    locked       : core._byte;
+
+};
+
+@comment : 'Table definition header key elements'
+type _tableDefinitionHeader_data 
+{
+    @Comment : 'Actual name of table'
+    schemaName         : core._id;
+    
+    @Comment : 'Actual name of table'
+    realName         : core._id;
+    
+    @Comment : 'Table Description'
+    description      : core._description;
+};   
+
+
+table type tt_tableDefinitionHeader {
+   key : _tableDefinitionHeader_keys;
+   data : _tableDefinitionHeader_data;
+   flags : _tableDefinitionHeader_flags;
+}; 
+
+/*table definition header*/
+@Comment : 'Table definition header data'
+    entity tableDefinitions {
+        key key : _tableDefinitionHeader_keys;
+            data : _tableDefinitionHeader_data;
+            flags : _tableDefinitionHeader_flags;
+    };
+
+
+
+
+/*
+   Table : Fields definitions 
+   (types)
+*/
+type _tableDefinitionFields_keys
+{
+      @Comment : 'Table Name identifier within the lake'
+       tableName   : core._id;
+       fieldName   : core._id;
+};    
+
+type _tableDefinitionFields_data
+{
+    @Comment : 'Field position '
+    pos : core._numericId;
+
+    @Comment : 'Is it a keyfield'
+    isAKey   : core._flag;
+
+    @Comment : 'Field description '
+    description : core._description;
+
+    @Comment : 'Field type Char, Integer, Decimal etc '
+    dataType    : core._id;
+
+    @Comment : 'Field lenght eg.17 '
+    dataLength   : core._id;
+
+    @Comment : 'Field scaling e.g 2 or 17,2 '
+    dataScale   : core._id;
+};  
+
+
+/*
+   Table : Fields definitions 
+   (table types)
+*/
+table type tt_tableDefinitionFields {
+   key : _tableDefinitionFields_keys;
+   data : _tableDefinitionFields_data;
+}; 
+
+/*
+   Table : Fields definitions 
+   (entity)
+*/
+@Comment : 'Main tablepool and control'
+entity tableFields {
+         key key : _tableDefinitionFields_keys;
+         data : _tableDefinitionFields_data;
+    };
+
+};

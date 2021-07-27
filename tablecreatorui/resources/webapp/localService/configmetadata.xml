@@ -1,0 +1,39 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+<edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
+<Schema xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="default">
+<EntityType Name="datatypesType">
+<Key>
+<PropertyRef Name="dataType"/>
+</Key>
+<Property Name="dataType" Type="Edm.String" Nullable="false" MaxLength="127"/>
+<Property Name="flag.requiresScale" Type="Edm.Int32"/>
+<Property Name="flag.scaleWithFraction" Type="Edm.Int32"/>
+</EntityType>
+<EntityType Name="tabletemplatesType">
+<Key>
+<PropertyRef Name="keys.templateName"/>
+</Key>
+<Property Name="keys.templateName" Type="Edm.String" Nullable="false" MaxLength="127"/>
+<Property Name="data.hanaTableType" Type="Edm.String" MaxLength="127"/>
+<Property Name="data.description" Type="Edm.String" MaxLength="2147483647"/>
+<Property Name="flags.insertAllowed" Type="Edm.Int32"/>
+<Property Name="flags.readAllowed" Type="Edm.Int32"/>
+<Property Name="flags.updateAllowed" Type="Edm.Int32"/>
+<Property Name="flags.deleteAllowed" Type="Edm.Int32"/>
+<Property Name="flags.temporary" Type="Edm.Int32"/>
+</EntityType>
+<EntityType Name="teamsType">
+<Key>
+<PropertyRef Name="key.teamID"/>
+</Key>
+<Property Name="key.teamID" Type="Edm.String" Nullable="false" MaxLength="127"/>
+<Property Name="data.description" Type="Edm.String" MaxLength="2147483647"/>
+</EntityType>
+<EntityContainer Name="v2" m:IsDefaultEntityContainer="true">
+<EntitySet Name="datatypes" EntityType="default.datatypesType"/>
+<EntitySet Name="tabletemplates" EntityType="default.tabletemplatesType"/>
+<EntitySet Name="teams" EntityType="default.teamsType"/>
+</EntityContainer>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

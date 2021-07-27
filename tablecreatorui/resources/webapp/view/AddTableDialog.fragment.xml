@@ -1,0 +1,58 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout">
+
+	<Dialog
+		title="{i18n>addTableToLake}">
+		
+		<l:VerticalLayout class="sapUiContentPadding" width="100%">
+			
+		<Label text="{i18n>addTableToLakeName}" labelFor="input-tablename" />
+		<Input id="input-tablename" required="true" />	
+		
+		<Label text="{i18n>addTableToLakeDesc}" labelFor="input-tabledesc" />
+		<Input id="input-tabledesc" required="true"/>
+
+        <Label text="{i18n>addTableToLakeTemplate}" labelFor="input-tabletempl" />
+		<ComboBox 
+		    required="true"
+		    id="input-tabletempl"
+			editable="true" enabled="true"
+			showSecondaryValues= "true"
+			filterSecondaryValues= "true"
+			value="input-tabletemplate"
+			selectedKey="{config>keys.templateName}"
+			items="{  path: 'config>/tabletemplates', sorter: { path: 'keys.templateName' }}" >
+			<core:ListItem key="{config>keys.templateName}" text="{config>keys.templateName}" additionalText="{config>data.description}"/>
+		</ComboBox>
+		
+        <Label text="{i18n>addTableToLakeOwner}" labelFor="input-tableowner" />		
+		<ComboBox
+		    required="true"
+		    id="input-tableowner"
+			editable="true" enabled="true"
+			showSecondaryValues= "true"
+			filterSecondaryValues= "true"
+			value="input-tableowner"
+			selectedKey="{config>key.teamID}"
+			items="{  path: 'config>/teams', sorter: { path: 'key.teamID' }}" >
+			<core:ListItem key="{config>key.teamID}" text="{config>key.teamID}" additionalText="{config>data.description}"/>
+		</ComboBox>		
+		
+		<CheckBox id="input-tableexposable" text="{i18n>addTableToLakeExposable}" valueState="Warning" enabled="true" selected="true" />
+	<!--
+	<CheckBox enabled="true" selected="{path:'config>flags.insertAllowed', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+    -->
+    
+  	</l:VerticalLayout>
+
+		<beginButton> 
+			<Button text="Cancel" press="onAddTableDialogCancel"/>
+    	</beginButton>
+		<endButton> 
+			<Button text="Save" press="onAddTableDialogOK"/>
+    	</endButton>
+    	
+	</Dialog>
+</core:FragmentDefinition>

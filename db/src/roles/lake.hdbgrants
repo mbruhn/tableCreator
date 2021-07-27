@@ -1,0 +1,23 @@
+{
+ "DL_ADMIN":
+   {
+      "object_owner":{
+        "schema_privileges":[
+            {
+               "schema" : "LAKE",
+               "privileges" : [ "CREATE ANY" ],
+               "privileges_with_grant_option" : [  "CREATE ANY", "SELECT", "INSERT" ]
+            }
+         ]
+      },
+      "application_user":{  
+         "schema_privileges":[
+            {
+               "schema" : "LAKE",
+               "privileges" : [ "CREATE ANY" ],
+               "privileges_with_grant_option" : [  "CREATE ANY", "SELECT", "INSERT" ]
+            }
+         ]
+      }
+   }
+}

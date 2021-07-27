@@ -1,0 +1,66 @@
+using core;
+
+context configdata {
+
+@comment : 'Data type config flags '
+	type _dataType_Flags {
+      @Comment : 'The type requires scale'
+      requiresScale		: core._flag;
+
+      @Comment : 'Data type scale with fraction'
+      scaleWithFraction	: core._flag;
+	};
+
+@Comment : 'Datatypes for table fields '
+    entity dataTypes {
+      @Comment : 'Field type Char, Integer, Decimal etc '
+      key	dataType    : core._id;
+    		flag		:  _dataType_Flags;
+    };
+
+
+/*    Template definition 
+  
+*/
+
+@comment : 'Table template - key fields'
+	type _tableTemplate_Keys {
+      @Comment : 'Template identifier'
+      templateName		: core._id;
+	};
+
+@comment : 'Table template - data fields'
+	type _tableTemplate_Data {
+      @Comment : 'Table type identifier'
+      hanaTableType	: core._id;
+      
+      @Comment : 'Table type descriptor'
+      description   : core._description;
+	};
+
+@comment : 'Table template - flags'
+	type _tableTemplate_Flags {
+      @Comment : 'Inserts allowed for type'
+      insertAllowed		: core._flag;
+      @Comment : 'Reads allowed for type'
+      readAllowed 		: core._flag;
+      @Comment : 'Updates allowed for type'
+      updateAllowed		: core._flag;
+      @Comment : 'Deletes allowed for type'
+      deleteAllowed		: core._flag;
+      @Comment : 'Create table as global temporary'
+      temporary  : core._flag;
+	};
+
+
+@Comment : 'Table types and permitted operations'
+    entity tableTemplates {
+      key	keys   : _tableTemplate_Keys;
+    		data   : _tableTemplate_Data; 
+    		flags  : _tableTemplate_Flags; 
+    };
+
+
+
+
+};

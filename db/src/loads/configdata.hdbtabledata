@@ -1,0 +1,21 @@
+{
+    "format_version": 1,
+    "imports": [
+        {
+            "target_table": "configdata.dataTypes",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "datatypes.csv",
+                "has_header": true
+            }
+        },
+                {
+         "target_table": "configdata.tableTemplates",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "tableTemplates.csv",
+                "has_header": true
+            }
+        }
+    ]
+}

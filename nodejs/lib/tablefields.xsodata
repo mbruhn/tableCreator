@@ -1,0 +1,17 @@
+service {
+  "coremodel.tableDefinitions" as "tables" navigates ("Columns" as "tablefields", "toAcl" as "tableAcls");
+  
+  "coremodel.tableFields"      as "tablefields";
+  
+  "aclmodel.tableACL"          as "tableAcls";
+ 
+  association "Columns" 
+    principal "tables"("key.tableName") multiplicity "1"
+    dependent "tablefields"("key.tableName") multiplicity "*";
+    
+  association "toAcl" 
+    principal "tables"("key.tableName") multiplicity "1"
+    dependent "tableAcls"("key.tableName") multiplicity "*";
+    
+  
+}

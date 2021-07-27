@@ -1,0 +1,3 @@
+key.tableName,key.teamID,flags.owner,flags.insertData,flags.readData,flags.updateData,flags.deleteData,flags.lockAndUnlock,flags.exposeView
+ZQ_CAR_ReceiptAnalysis_laketable,AA_TEAM,1,1,1,1,1,1,1
+ZQ_CAR_ReceiptAnalysis_laketable,BW_TEAM,0,0,1,0,0,0,1

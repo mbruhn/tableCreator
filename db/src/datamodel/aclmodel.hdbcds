@@ -1,0 +1,154 @@
+using core;
+context aclmodel {
+
+
+/**/
+	@comment : 'Table ACL key'
+	type _tableACL_Keys 
+	{
+		@Comment : 'Table Name identifier withín the lake'
+		tableName  : core._id;
+		@Comment : 'Team Id'
+		teamID   : core._id;
+	
+	};
+
+ /*Main tablepool table*/
+ 	type _tableACL_flags 
+	{
+		@Comment : 'Team is an owner'
+		owner         : core._byte;
+
+		@Comment : 'Team can insert data'
+		insertData   : core._byte;
+
+    	@Comment : 'Team can read data'
+    	readData      : core._byte;
+
+		@Comment : 'Team can update/change data'
+		updateData    : core._byte;
+
+		@Comment : 'Team can delete data'
+		deleteData    : core._byte;
+    	
+        @Comment : 'Team can lock and unlock table definition'
+        lockAndUnlock : core._byte;
+
+        @Comment : 'Team can expose table on the hub'
+        exposeView    : core._byte;
+    };
+
+
+    /*Main tablepool table*/
+	@Comment : 'Main tablepool and control'
+    entity tableACL {
+        key key : _tableACL_Keys;    
+        flags : _tableACL_flags ;
+    };
+
+
+    /*
+    	  Team access´to creator is controlled
+    	  by XSA jwt definitions
+    	  Access to table creator - controlled by XSA
+    	   MemberID
+    	   TableCreator -> Create
+    	
+    	   CreateTacreate
+    	*/
+
+	@comment : 'Table ACL key'
+	type _team_Keys 
+	{
+		@Comment : 'Team Id'
+		teamID   : core._id;
+	};
+
+ /*Main tablepool table*/
+ 	type _team_Data 
+	{
+		@Comment : 'Team Description'
+		description  :  core._description;
+    };
+
+
+	@comment : 'Team identifier'
+    entity team
+	{
+		key key  : _team_Keys; 
+		    data : _team_Data;
+	};
+
+/*table definition header*/
+
+	@comment : 'Team ACL key'
+	type _teamACL_Keys 
+	{
+		@Comment : 'Team Id'
+		teamID            : core._id;
+		@Comment : 'User Id'
+		userID            : core._id;
+	};
+
+	@comment : 'Team ACL flags'
+	type _teamACL_Flags 
+	{
+	    @Comment : 'UserID is manager for team'
+	    manager       : core._byte;
+
+	    @Comment : 'User can act as admin and grant already existing users other rights'
+	    admin         : core._byte;
+
+	    @Comment : 'User can act as owner for all tables owned by team'
+	    owner         : core._byte;
+
+		@Comment : 'User can insert data'
+		insertData   : core._byte;
+
+	    @Comment : 'User can read data'
+	    readData      : core._byte;
+
+		@Comment : 'User can update/change data'
+		updateData    : core._byte;
+
+		@Comment : 'User can delete data'
+		deleteData    : core._byte;
+    	
+	    @Comment : 'User can lock and unlock table definition'
+	    lockAndUnlock : core._byte;
+
+	    @Comment : 'User can expose table on the hub'
+	    exposeView    : core._byte;
+	};
+
+	@Comment : 'Table definition header data'
+    entity teamACL {
+        key key : _teamACL_Keys;
+			flag : _teamACL_Flags;
+    };
+
+    @Comment : 'Create team the first time'
+    table type tt_teamcreation_in {
+		key : _teamACL_Keys;
+    }; 
+     
+     
+  
+    /*
+    	  TeamID
+    	  MemberID
+    	
+    	  OwnerFlag
+    	  AdminFlag
+    	  ChangeDataFlag
+    	  ReadDataFlag
+    	  LockAndUnlockFlag
+    	  ExposeViewFlag
+    	  ReadCacheFlag
+    	
+    	*/
+
+
+	
+	
+};

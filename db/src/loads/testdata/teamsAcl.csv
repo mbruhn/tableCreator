@@ -1,0 +1,5 @@
+key.teamID,key.userID,flag.manager,flag.admin,flag.owner,flag.readData,flag.lockAndUnlock,flag.exposeView,flag.insertData,flag.updateData,flag.deleteData
+AA_TEAM,CONS_MBRU,1,1,1,1,1,1,1,1,1
+AA_TEAM,CLOH,1,1,1,1,1,1,1,1,1
+BW_TEAM,CONS_MBRU,1,1,1,1,1,1,1,1,1
+BW_TEAM,CLOH,1,1,1,1,1,1,1,1,1

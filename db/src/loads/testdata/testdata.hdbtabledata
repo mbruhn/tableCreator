@@ -1,0 +1,46 @@
+{
+    "format_version": 1,
+    "imports": [
+        {
+            "target_table": "coremodel.tableDefinitions",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "tables.csv",
+                "has_header": true
+            }
+        },
+        {
+         "target_table": "coremodel.tableFields",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "tableFields.csv",
+                "has_header": true
+            }
+        },
+        {
+         "target_table": "aclmodel.tableACL",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "tableAcl.csv",
+                "has_header": true
+            }
+        },
+        {
+         "target_table": "aclmodel.team",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "teams.csv",
+                "has_header": true
+            }
+        },        
+        {
+         "target_table": "aclmodel.teamACL",
+            "source_data": {
+                "data_type": "CSV",
+                "file_name": "teamsAcl.csv",
+                "has_header": true
+            }
+        }
+        
+    ]
+}

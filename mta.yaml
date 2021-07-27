@@ -1,0 +1,61 @@
+ID: ZTABLECREATOR
+_schema-version: '2.1'
+description: Table creation for the LAKE
+version: 0.0.1
+
+modules:
+ - name: db
+   type: hdb
+   path: db
+   requires:
+    - name: hdi_db
+      properties:
+        TARGET_CONTAINER: ~{hdi-container-name}
+
+    - name: cross-container-service-1
+      group: SERVICE_REPLACEMENTS
+
+      properties:
+        key: ServiceName_1
+        service: ~{the-service-name}
+                          
+
+ - name: core_xsjs
+   type: nodejs
+   path: nodejs
+   requires:
+    - name: db
+    - name: hdi_db
+   provides:
+    - name: core_xsjs_api
+      properties:
+         url: ${default-url}
+
+
+ - name: tablecreatorui
+   type: html5
+   path: tablecreatorui
+   requires:
+    - name: core_xsjs_api
+      group: destinations
+      properties:
+         name: nodejs_be
+         url: ~{url}
+
+resources:
+ - name: hdi_db
+   parameters:
+      config:
+         schema: ZTABLECREATOR
+         makeUniqueName: false
+   properties:
+      hdi-container-name: ${service-name}
+   type: com.sap.xs.hdi-container
+
+ - name: cross-container-service-1
+   parameters:
+      service-name: DL_ADMIN 
+   properties:
+      the-service-name: ${service-name}
+   type: org.cloudfoundry.existing-service
+

@@ -1,0 +1,32 @@
+/*
+   core
+   
+   Contains simple datadefinitions used in subsequent model files
+   
+*/
+
+context core {
+
+/*  Simple basic types */
+	type _id          : String(127); 
+	type _numericId   : Integer;
+	type _value       : String(127);
+	type _description : LargeString;
+	
+	type _dateTime    : UTCDateTime;
+	type _bool        : Boolean;
+	type _timeStamp   : UTCTimestamp;
+	type _enumerate   : Integer;
+	type _byte        : Integer;
+    
+/*services cannot use boolean hence 
+  flag is an integer 
+  0 -> False
+  1 -> true
+  */    
+  
+    type _flag        : Integer;
+    
+
+ 
+};

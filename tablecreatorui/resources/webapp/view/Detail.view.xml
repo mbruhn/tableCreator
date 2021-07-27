@@ -1,0 +1,270 @@
+<mvc:View 
+	controllerName="creator.controller.Detail" 	
+	xmlns="sap.m" 
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:semantic="sap.m.semantic" 
+	xmlns:core="sap.ui.core"
+	xmlns:dnd="sap.ui.core.dnd">
+
+	<semantic:DetailPage id="page" navButtonPress="onNavBack" showNavButton="{device>/system/phone}" title="{i18n>detailTitle}" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+
+		<semantic:content>
+			<ObjectHeader id="objectHeader" title="{key.tableName}">
+			   	<firstStatus>
+			   		<ObjectStatus icon="{path:'flags.locked', formatter:'.formatter.lockedStatusIcon'}" state="{i18n>lockedState}" text="{path:'flags.locked', formatter:'.formatter.lockedStatusText'}"/>  	
+				</firstStatus>   
+			   	<secondStatus>
+			   		<ObjectStatus icon="{path:'flags.exposed', formatter:'.formatter.exposedStatusIcon'}" state="{i18n>exposedState}" text="{path:'flags.exposed', formatter:'.formatter.exposedStatusText'}"/>  	
+				</secondStatus>   				
+				<attributes>
+					<ObjectAttribute text="{i18n>detailHeaderTableSchema} {data.schemaName}"/>
+					<ObjectAttribute text="{i18n>detailHeaderTableFullName} {data.realName}"/>
+					<ObjectAttribute text="{i18n>detailHeaderTableOwner} {data.owner}"/>
+				<!--	<ObjectAttribute text="{i18n>detailHeaderTableDescription} {data.description}"/> -->
+				
+				</attributes>
+
+			</ObjectHeader>
+	
+	        <Panel class="sapUiResponsiveMargin">
+	        	<content> 
+	        		<Label text="{i18n>detailHeaderTableDescription}"/>
+	        		<Input placeholder="{i18n>detailHeaderTableDescription}" value="{data.description}" editable="{detailView>/uiEditable}" width="95%" class="sapUiSmallMarginEnd"/>	
+		    	</content>
+		    </Panel>
+				
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://provision" tooltip="{i18n>detailIconTabBarFields}">
+						<Table id="lineItemsList" width="auto" items="{ path : 'tablefields', sorter : { path : 'data.pos' }}" updateFinished="onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
+							<headerToolbar>
+								<Toolbar id="lineItemsToolbar">
+									<Title id="lineItemsHeader" text="{detailView>/lineItemListTitle}"/>
+										<ToolbarSpacer/>
+										<Button
+								    		visible="{detailView>/uiEditable}"
+											tooltip="Add Record"
+											icon="sap-icon://add"
+											press="handleTableFieldAdd"
+											ariaHasPopup="Dialog"/>
+										<Button
+										    visible="{detailView>/uiEditable}"
+											tooltip="Delete"
+											icon="sap-icon://delete"
+											press="handleTableFieldDelete"
+											ariaHasPopup="Dialog"/>
+										<Button
+										    visible="{detailView>/uiEditable}"
+											tooltip="Reset"
+											icon="sap-icon://reset"
+											press="handleTableFieldReset"
+											ariaHasPopup="Dialog"/>									
+									
+									
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text="{i18n>detailLineItemTablePosColumn}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>detailLineItemTableKeyColumn}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>detailLineItemTableIDColumn}"/>
+								</Column>
+								<Column width="20%">
+									<Text text="{i18n>detailLineItemTableDescColumn}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>detailLineItemTableTypeColumn}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>detailLineItemTableLengthColumn}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>detailLineItemTableScaleColumn}"/>
+								</Column>
+							</columns>
+							<dragDropConfig>
+								<dnd:DragDropBase enabled="{detailView>/uiEditable}"/>
+								<dnd:DragDropInfo
+									sourceAggregation="items"
+									targetAggregation="items"
+                    				dropPosition="Between"
+									drop="onDrop"/>
+							</dragDropConfig>
+							
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier title="{data.pos}"/>
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'data.isAKey', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<Input type="Text" placeholder="{i18n>detailLineItemTablePhFieldName}" value="{key.fieldName}" editable="{detailView>/uiEditable}"/>
+										<Input type="Text" placeholder="{i18n>detailLineItemTablePhFieldDesc}" value="{key.description}" editable="{detailView>/uiEditable}"/>
+									 
+										<ComboBox
+										    editable="{detailView>/uiEditable}" enabled="{detailView>/uiEditable}"
+											showSecondaryValues= "true"
+											filterSecondaryValues= "true"
+											value="{data.dataType}"
+											selectedKey="{config>dataType}"
+											items="{  path: 'config>/datatypes', templateShareable:false, sorter: { path: 'dataType' }}" >
+												<core:ListItem key="{config>dataType}" text="{config>dataType}" additionalText="{config>dataType}"/>
+										</ComboBox>
+										
+										<!--editable="{path:'data.dataType', formatter:'.formatter.typeRequiresScale'}" -->
+										<Input type="Text" placeholder="{i18n>detailLineItemTablePhFieldLength}" value="{data.dataLength}" editable="{detailView>/uiEditable}"/>
+										
+										<Input type="Text" placeholder="{i18n>detailLineItemTablePhFieldScale}" value="{data.dataScale}" editable="{detailView>/uiEditable}"/>
+										<!-- <ObjectIdentifier title="{data.dataScale}"/> -->
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+						
+					</IconTabFilter>  
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://permission" tooltip="{i18n>detailIconTabBarACL}">
+						<Table id="aclItemsList" width="auto" items="{ path : 'tableAcls'}" mode="MultiSelect"
+						       updateFinished="onListUpdateFinished" noDataText="{i18n>AclLineItemTableNoDataText}" 
+						       busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
+							<headerToolbar>
+								<Toolbar id="AclItemsToolbar">
+									<Title id="AclItemsHeader" text="{i18n>AclLineItemTableHeading}"/>  
+										<ToolbarSpacer/>
+										<Button
+								    		visible="{detailView>/uiEditable}"
+											tooltip="Add Record"
+											icon="sap-icon://add"
+											press="handleAclTableAdd"
+											ariaHasPopup="Dialog"/>
+										<Button
+										    visible="{detailView>/uiEditable}"
+											tooltip="Delete"
+											icon="sap-icon://delete"
+											press="handleAclTableDelete"
+											ariaHasPopup="Dialog"/>
+										<Button
+										    visible="{detailView>/uiEditable}"
+											tooltip="Reset"
+											icon="sap-icon://reset"
+											press="handleAclTableReset"
+											ariaHasPopup="Dialog"/>		
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="50%">
+									<Text text="{i18n>AclLineItemTableTeamIDColumn}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableOwnerColumn}"/>
+                                </Column>
+
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableInsertDataColumn}"/>
+                                </Column>
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableReadDataColumn}"/>
+                                </Column>
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableUpdateDataColumn}"/>
+                                </Column>
+                                <Column width="5%">
+									<Text text="{i18n>AclLineItemTableDeleteDataColumn}"/>
+                                </Column>							
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableLockColumn}"/>
+                                </Column>
+								<Column width="5%">
+									<Text text="{i18n>AclLineItemTableExposeColumn}"/>
+                                </Column>
+
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+									
+									<!--	<Input type="Text" placeholder="{i18n>AclLineItemTablePhTeamID}" value="{key.teamID}" editable="{detailView>/uiEditable}"/>
+									-->
+										<ComboBox
+		    								required="true"
+            								editable="{detailView>/uiEditable}" enabled="{detailView>/uiEditable}"
+											showSecondaryValues= "true"
+											filterSecondaryValues= "true"
+											value="{key.teamID}"
+											selectedKey="{config>key.teamID}"
+											items="{  path: 'config>/teams', sorter: { path: 'key.teamID' }}" >
+											<core:ListItem key="{config>key.teamID}" text="{config>key.teamID}" additionalText="{config>data.description}"/>
+										</ComboBox>		
+
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.owner', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.insertData', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.readData', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.updateData', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.deleteData', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.lockAndUnlock', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'flags.exposeView', formatter:'.formatter.fieldIsAKey2bool'}"/> 
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+						
+					</IconTabFilter>
+					<IconTabFilter id="iconTabBarFilterInfo" icon="sap-icon://information" tooltip="{i18n>detailIconTabBarInfo}">
+						<Table id="configItemsList" width="auto" items="{ path : 'config>/datatypes'}" mode="MultiSelect"
+						       updateFinished="onListUpdateFinished" noDataText="{i18n>AclLineItemTableNoDataText}" 
+						       busyIndicatorDelay="{detailView>/lineItemTableDelay}" class="sapUiResponsiveMargin">
+
+							<columns>
+
+								<Column width="25%">
+									<Text text="{i18n>AclLineItemTableReadDataColumn}"/>
+                                </Column>
+								<Column width="25%">
+									<Text text="{i18n>AclLineItemTableUpdateDataColumn}"/>
+                                </Column>
+                                <Column width="25%">
+									<Text text="{i18n>AclLineItemTableDeleteDataColumn}"/>
+                                </Column>							
+
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+									
+										<Input type="Text" placeholder="{i18n>AclLineItemTablePhTeamID}" value="{config>dataType}" editable="{detailView>/uiEditable}"/>
+										<Input type="Text" placeholder="{i18n>AclLineItemTablePhTeamID}" value="{config>flag.requiresScale}" editable="{detailView>/uiEditable}"/>
+										<Input type="Text" placeholder="{i18n>AclLineItemTablePhTeamID}" value="{config>flag.scaleWithFraction}" editable="{detailView>/uiEditable}"/>
+										
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>	
+						
+						
+						
+						
+						
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+
+		</semantic:content>
+		
+				<semantic:customFooterContent>
+					<OverflowToolbarButton id="detailsSave" tooltip="Save" text="Save" icon="sap-icon://save" visible="{detailView>/uiEditable}" press="onSemanticButtonPress"/>
+					<OverflowToolbarButton id="detailsEdit" tooltip="Edit" text="Edit" icon="sap-icon://edit" 
+					       visible="{parts:[ {path:'flags.locked'},
+					                         {path:'detailView>/uiDisplay'} ] , 
+					                formatter:'.formatter.enableEditButton'}" press="onSemanticButtonPress"/>
+					
+					
+					
+				</semantic:customFooterContent>
+				
+				<semantic:sendEmailAction>
+					<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>
+				</semantic:sendEmailAction>
+	</semantic:DetailPage>
+
+</mvc:View>

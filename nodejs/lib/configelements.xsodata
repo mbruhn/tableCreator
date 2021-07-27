@@ -1,0 +1,5 @@
+service {
+  "configdata.dataTypes"       as "datatypes";
+  "configdata.tableTemplates"  as "tabletemplates";
+  "aclmodel.team"              as "teams";
+}
