@@ -129,13 +129,36 @@ items = items +" " + value.getCells()[0].getText();
 				var path = bindingContext.getPath();
 				var object = bindingContext.getModel().getProperty(path);
                 var fields = bindingContext.getModel().getProperty(path).tablefields;
+                var tablefields = bindingContext.getModel().getProperty(path+"/tablefields") 
+             //   var nytest = object.getProperty("data.realName");
+
+
 
                 var oModel = bindingContext.getModel();
 			    var propertyPath = path + "/tablefields";
 			   
+			   // var entity = this.getView().getModel().getObject("/"+key);
+     // var property = this.getView().getModel().getProperty("/"+key+"/Depth");
+			    var test4 = oModel.getObject(propertyPath);
 			    var test = oModel.getProperty(propertyPath);
 			    var test3 = oModel.read(propertyPath);
 			   
+			   
+
+  
+    
+		 
+			   
+   var oTable =	this.getView().byId("lineItemsList");
+   var items = oTable.getItems(); // [i].getCells()[i].getText();
+   // var noOfRecords = oTable.getItems().length;
+    
+   //
+   //for(var i=0,i<items.length;i++) {
+ //    var nvalue = items[2].getCells()[3].getText();		   
+     // a = items[i].getProperty();
+
+// }	   
 			   
 			   // create an entry of the Products collection with the specified properties and values
 // var oContext = oModel.createEntry("/Products", { properties: { ID:99, Name:"Product", Description:"new Product", ReleaseDate:new Date(), Price:"10.1", Rating:1} });
@@ -159,7 +182,7 @@ items = items +" " + value.getCells()[0].getText();
 			     
 			 	var bindingContext = this.getView().getBindingContext();
 				var path = bindingContext.getPath();
-			    var propertyPath = path + "/tableAcls";
+			    var propertyPath = path; // + "/tableAcls";
 			     
 			     
 			     
@@ -171,7 +194,9 @@ items = items +" " + value.getCells()[0].getText();
 			     // propertyPath
 			      // which bindings exists ?? / rather than using create we create the 
 			      // entry in the odata model - only submit changes when saving
-			      var oContext = oBinding.oModel.createEntry(propertyPath, {
+			      //var oContext = oBinding.oModel.createEntry(propertyPath, {
+			      	
+			      var oContext = oBinding.oModel.createEntry( propertyPath, {
 			      		properties: {	"key.tableName" : sTableName,
 										"key.teamID"    : "",
 									    "flags.owner"         : formatter.fieldBool2Int(false),
@@ -187,7 +212,7 @@ items = items +" " + value.getCells()[0].getText();
 			     // this.byId("aclItemsList").goViewModel.setBindingContext(oContext);
                   // setBindingContex
                 /* this.getView().setBindingContext(this.getModel("detailView").createEntry("/MyEntitySet",  { properties: {	"key.tableName" : sTableName,
-			    											"key.teamID"    : "",
+			    								    	"key.teamID"    : "",
 													    "flags.owner"         : formatter.fieldBool2Int(false),
 													    "flags.insertData"    : formatter.fieldBool2Int(false),
 											      	    "flags.readData"      : formatter.fieldBool2Int(true),
