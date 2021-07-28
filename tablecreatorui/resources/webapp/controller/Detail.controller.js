@@ -68,8 +68,8 @@ sap.ui.define([
              
              aRows.forEach(function(item){
     // log to the console for debugging only:        
-    var acell = item.getCells()[1];
-    console.log("scheduledTask.xsjs:create: ");
+             var acell = item.getCells()[1];
+    
     		   MessageToast.show(acell);
 });
              // getRows -
@@ -117,32 +117,72 @@ items = items +" " + value.getCells()[0].getText();
 			/* event handlers                                              */
 			/* =========================================================== */
 
+    		// Create new field added - edit  
+			handleTableFieldAdd  : function (oEvent) {
+				var oViewModel = this.getModel("detailView"),
+			    	pressedButtonID = oEvent.getSource().getId(),
+			    	oBinding = this.byId("lineItemsList").getBinding("items");
+			    	
+			    
+    // get selected table
+				var bindingContext = this.getView().getBindingContext();
+				var path = bindingContext.getPath();
+				var object = bindingContext.getModel().getProperty(path);
+                var fields = bindingContext.getModel().getProperty(path).tablefields;
+
+                var oModel = bindingContext.getModel();
+			    var propertyPath = path + "/tablefields";
+			   
+			    var test = oModel.getProperty(propertyPath);
+			    var test3 = oModel.read(propertyPath);
+			   
+			   
+			   // create an entry of the Products collection with the specified properties and values
+// var oContext = oModel.createEntry("/Products", { properties: { ID:99, Name:"Product", Description:"new Product", ReleaseDate:new Date(), Price:"10.1", Rating:1} });
+// binding against this entity
+// oForm.setBindingContext(oContext);
+			   
+			   
+			},
 	
 			// new acl entry
 			handleAclTableAdd : function (oEvent) {
 		 	  var oViewModel = this.getModel("detailView"),
 			      pressedButtonID = oEvent.getSource().getId(),
 			      oBinding = this.byId("aclItemsList").getBinding("items");
-			      
+			   
 			     		// get binding table name 	    
 			    var sPathBinding = this.byId("lineItemsList").getBinding("items").oContext.sPath,
 			        sTablePath = sPathBinding.substring(sPathBinding.lastIndexOf("('") + 1, sPathBinding.lastIndexOf("')")),
 			        sTableName = sTablePath.split("'").pop().split("'")[0];
 			     
 			     
+			 	var bindingContext = this.getView().getBindingContext();
+				var path = bindingContext.getPath();
+			    var propertyPath = path + "/tableAcls";
+			     
+			     
+			     
+			     
+			     
+			     
+			     
+			     
+			     // propertyPath
 			      // which bindings exists ?? / rather than using create we create the 
 			      // entry in the odata model - only submit changes when saving
-			      var oContext = oBinding.oModel.createEntry("/tableAcls", 
-			    										 { properties: {	"key.tableName" : sTableName,
-			    											"key.teamID"    : "",
-													    "flags.owner"         : formatter.fieldBool2Int(false),
-													    "flags.insertData"    : formatter.fieldBool2Int(false),
-											      	    "flags.readData"      : formatter.fieldBool2Int(true),
-											      	    "flags.updateData"    : formatter.fieldBool2Int(false),
-											      	    "flags.deleteData"    : formatter.fieldBool2Int(false),
-											      	    "flags.lockAndUnlock" : formatter.fieldBool2Int(false),
-											      	    "flags.exposeView"    : formatter.fieldBool2Int(false)}});
-			      
+			      var oContext = oBinding.oModel.createEntry(propertyPath, {
+			      		properties: {	"key.tableName" : sTableName,
+										"key.teamID"    : "",
+									    "flags.owner"         : formatter.fieldBool2Int(false),
+										"flags.insertData"    : formatter.fieldBool2Int(false),
+										"flags.readData"      : formatter.fieldBool2Int(true),
+										"flags.updateData"    : formatter.fieldBool2Int(false),
+										"flags.deleteData"    : formatter.fieldBool2Int(false),
+										"flags.lockAndUnlock" : formatter.fieldBool2Int(false),
+										"flags.exposeView"    : formatter.fieldBool2Int(false)}});
+			     // Please use modelTab.setProperty("/", oData.results)
+			      this.byId("aclItemsList").setBindingContext(oContext);
 			      
 			     // this.byId("aclItemsList").goViewModel.setBindingContext(oContext);
                   // setBindingContex
