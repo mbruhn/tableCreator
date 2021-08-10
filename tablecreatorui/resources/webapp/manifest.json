@@ -100,7 +100,10 @@
 				"dataSource": "mainService",
 				"settings": {
 		            "useBatch": false,
-					"metadataUrlParams": {
+		            "defaultBindingMode": "TwoWay",
+		            "defaultUpdateMethod": "PUT",
+                    "refreshAfterChange": true,
+		            "metadataUrlParams": {
 						"sap-documentation": "heading"
 					}
 				}

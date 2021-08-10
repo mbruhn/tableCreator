@@ -46,13 +46,175 @@ sap.ui.define([
 				iDragPosition = oDragContainer.indexOfItem(oDragged),
 				iDropPosition = oDropContainer.indexOfItem(oDropped);
 
-			
+                 // correct context - field is taken
+                var oDragContext = oDragged.getBindingContext();
+                var oDraggedRow = oDragContext.getModel().getProperty(oDragContext.sPath);
+                var draggedPos  = oDragContext.getModel().getProperty(oDragContext.sPath+"/data.pos");
+                
+                
+                //Drop context
+                var oDropContext = oDropped.getBindingContext();
+                var oDroppedRow = oDropContext.getModel().getProperty(oDropContext.sPath);
+                var droppedPos  = oDropContext.getModel().getProperty(oDropContext.sPath+"/data.pos");
+                
+                /* drag , drop 
+                1    -    3    - dragdown   ( move all 1 up position - 1  )
+                3    -    1    - dragg  up ( move all 1 down position + 1  )
+                */ 
+                
+                var dragDirection = (draggedPos < droppedPos ? "DragDown" : "DragUp");
+                
+      
+                
+                
+            	var oTable = this.byId("lineItemsList");
+        	    var gModel = oTable.getModel();
+                
+                // get all rows between drop (startt) and drag (end)
+                var numberOfTableItems = oTable.getItems().length;
+                var oTableItems = oTable.getItems();
+                //var oSingleTableRow = gModel.getProperty(oTableItems[1].getBindingContext().getPath());
+     
+                for(var i = 0; i < numberOfTableItems;i++) {
+                   var row = gModel.getProperty(oTableItems[i].getBindingContext().getPath());
+                   
+                   
+                   // drag down
+                   // 1 to 3
+                   /*
+                      1 A     -> 3     
+                      2 A     -> up - 1 
+                      3 A     -> up -1     
+                   */
+                   
+                   
+                   
+                   // re set data position + 1 for records between drag and drop position
+                   if ( row["data.pos"] >= droppedPos  && row["data.pos"] <= draggedPos) {
+                   
+                     if (dragDirection === "DragDown" ) {
+                    	gModel.setProperty(oTableItems[i].getBindingContext().getPath()+"/data.pos", row["data.pos"]-1) ; 	
+                     }
+                     else {
+                    	gModel.setProperty(oTableItems[i].getBindingContext().getPath()+"/data.pos", row["data.pos"]+1) ;
+                     }
+                    
+                     
+                     }
+                     
+                }
+                
+                // Finally set the dragged position to the number of the dropped 
+                
+            // validate that update will happen 
+            //oDropContext.getModel().setProperty(oDropContext.sPath+"/data.pos", draggedPos);
+            
+            oDragContext.getModel().setProperty(oDragContext.sPath+"/data.pos", droppedPos);
+            
+                
+                
+                
+                
+                
+                
+                
+                
+                // is there a get parent 
+                // var oDraggedRow1 = oDragContext.getModel().getObject(oDragContext.sPath); 
+              
+            
+            /*
+            Change value 
+            bindingContext.getModel().setProperty("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')/data.dataLength", 25);     
+            */ 
+            
+                
+                           // wron context  var b  = oDragContainer.getBindingContext();
+          
+			// refresh
 			//var sPath = oTable.getBindingPath("items");
 		
 		
 		     // Link to table id and items binding for the table fields 
         	 var oBinding = this.byId("lineItemsList").getBinding("items");
-		  	 var oTableFieldsData = oBinding.oModel.oData;
+        	 // refresh the table entries
+        	//   oBinding.refresh(true);
+        	//   
+        	
+        	
+        	//use rerendere ?? 
+        	var oTable = this.byId("lineItemsList");
+        	
+            // Waht ?
+        	//  this.byId("lineItemsList").setBindingContext(undefined);
+        	 
+        	 
+        	 /*Redo sorter*/
+        //	 var oSorter = new Sorter({ path: 'data.pos'});
+        	 //read oTable sorter 
+        	 
+        	 // manual sorting
+        	 // use the sorting 
+        	 // now really working 
+             oBinding.sort(oBinding.aSorters[0]);
+             
+           
+        	 // sorter : { path : 'data.pos' }}
+             // <Table id="defectsTable" growing="true" growingThreshold="10" items="{ path : '/Defects' ,sorter: {path: 'SEQUENCE'}}" mode="SingleSelectMaster" >
+           /*
+           
+           oTable.getBinding("rows").refresh();
+else if you have used sap.m.Table then try this:
+ */
+           // 	var oTable = this.byId("lineItemsList");
+           oTable.getBinding("items").refresh();
+          
+           // not  oTable.getBinding("rows").refresh();
+           var gModel = oTable.getModel();
+           
+           // All items of the model 
+           var numberOfTableItems = oTable.getItems().length;
+           
+           var oTableItems = oTable.getItems();
+           
+           var oSingleTableRow = gModel.getProperty(oTableItems[1].getBindingContext().getPath());
+  
+           // create entry      
+     
+           gModel.refresh();
+           oTable.getBinding("items").refresh();
+       
+           // todo : fire to the database
+          // gModel.submitChanges();
+   
+           /*
+             dropindex Take index of drop
+             dragindex Take index of drag
+             Renumber all entries inbetween 
+             1 dropindex     =  currentindex+1 -> 2
+             2 dropindex +1  =  currentindex+1 -> 3
+             3 dropindex +2  =  currentindex+1 -> 4
+             4 dragindex +3  =  dropindex      -> 1 
+             
+             reignate sorter - on table 
+             
+           */
+           
+  
+        
+        
+        // 	oTable.rerender();  
+             
+		  	// var oTableFieldsData = oBinding.oModel.oData;
+		  	 
+		  	 
+		  	 // refresh model?? 
+		  
+		  	 
+		  	 
+		  	 
+		  	 
+		  	 
             // var oTableFieldsoModel = oBinding.oModel('tablefields');
 		  	 
 		  	 // get drop record 	 
@@ -62,16 +224,7 @@ sap.ui.define([
 		  	 //var dragrec = oTableFieldsData[iDragPosition];
 		  	 
 		  	 
-		  	 var tableModel = this.getOwnerComponent().getModel("tablefields");
-             var table = this.byId("lineItemsList");
-             var aRows = table.getItems();
-             
-             aRows.forEach(function(item){
-    // log to the console for debugging only:        
-             var acell = item.getCells()[1];
-    
-    		   MessageToast.show(acell);
-});
+		  
              // getRows -
              // getItems
              // getData
@@ -119,38 +272,150 @@ items = items +" " + value.getCells()[0].getText();
 
     		// Create new field added - edit  
 			handleTableFieldAdd  : function (oEvent) {
+			// Basuc getters 
+			    var oTable = this.byId("lineItemsList");
+			    
 				var oViewModel = this.getModel("detailView"),
 			    	pressedButtonID = oEvent.getSource().getId(),
 			    	oBinding = this.byId("lineItemsList").getBinding("items");
 			    	
-			    
-    // get selected table
+			    // read the odataobject direct.. not best approach - but for debug only	
+			    // var noData = oBinding.getModel().oData;
+             
+			   // get binding context ie selected table 
 				var bindingContext = this.getView().getBindingContext();
 				var path = bindingContext.getPath();
 				var object = bindingContext.getModel().getProperty(path);
-                var fields = bindingContext.getModel().getProperty(path).tablefields;
-                var tablefields = bindingContext.getModel().getProperty(path+"/tablefields") 
+                
+                // "/tables('YAA_2020112601_backward_sarimax_features_best_models')"
+            
+				
+            
+             //based on path get the table name - from path remove unwanted chars 
+             var sTablePath = path.substring(path.lastIndexOf("('") + 1, path.lastIndexOf("')"));
+		     var sTableName = sTablePath.split("'").pop().split("'")[0];                
+                
+                
+            var tabnameInContextModel = bindingContext.getModel().getProperty(path +"/key.tableName");
+            
+         //   var tablefieldinfo = bindingContext.getModel().getProperty("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')/data.dataLength");     
+     
+     /*Change value */
+        //    bindingContext.getModel().setProperty("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')/data.dataLength", 25);     
+     
+                
+            // not working var fields = bindingContext.getModel().getProperty("/tablefields");
+     
+            // reads the object on the selected table 
+            var filledOutEntityFields = bindingContext.getObject();
+            // var tabelname = filledOutEntityFields("key.tableName");
+            var tabelname = filledOutEntityFields["key.tableName"];
+     
+     
+            
+             //  noData["tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')"]
+                
+                
+            //    var testerigen = oBinding.getModel().getProperty(path);
+                
+                // not working var fields = bindingContext.getModel().getProperty(path).tablefields;
+                // invoke read fiedls 
+                
+                
+               // not working  var tablefields = bindingContext.getModel().getProperty(path+"/tablefields"); 
              //   var nytest = object.getProperty("data.realName");
 
+			// based on current binding this provides the oData (table fields)
+            // not the way var oData = bindingContext.getModel().oData; 
+             
 
-
-                var oModel = bindingContext.getModel();
-			    var propertyPath = path + "/tablefields";
-			   
-			   // var entity = this.getView().getModel().getObject("/"+key);
-     // var property = this.getView().getModel().getProperty("/"+key+"/Depth");
-			    var test4 = oModel.getObject(propertyPath);
-			    var test = oModel.getProperty(propertyPath);
-			    var test3 = oModel.read(propertyPath);
-			   
-			   
-
+			
+			
+			
+			// var oTable = this.byId("lineItemsList");
+            var gModel = oTable.getModel();
+           
+           // All items of the model 
+           var numberOfTableItems = oTable.getItems().length;
+        
+           //var oTableItems = oTable.getItems();
+           
+           //var oSingleTableRow = gModel.getProperty(oTableItems[1].getBindingContext().getPath());
   
+			// test case
+			/*
+			    /tablefields path + "/tablefields";
+			    spath + 
+			 */
+       
+            // creating an entity object 
+            /* var oContext = bindingContext.oModel.createEntry(path + "/tablefields",{
+			      		properties: {	"key.tableName"     : sTableName,
+										"key.fieldname"     : "",
+									    "data.dataLength"   : 0,
+										"data.dataScale"    : 0,
+										"data.dataType"     : "",
+										"data.description"  : "",
+										"data.isKey"        : 0, 
+										"data.pos"          : numberOfTableItems + 1 }});             
+      */
+      //    not working :   oTable.setBindingContext(oContext);
+            // oContext. 
+            // oContext.
+            
+  
+     // create field 
+     
+     // Bind field to table entity
+     
+     // /tables() / tablefienldæs 
+     
+              gModel.createEntry(path + "/tablefields",{
+              //gModel.createEntry(path + "/tablefields",{
+              	
+             // gModel.createEntry("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='zzaic')",{
+			      		properties: {	"key.tableName"     : sTableName,
+										"key.fieldname"     : "zzaic",
+									    "data.dataLength"   : 0,
+										"data.dataScale"    : 0,
+										"data.dataType"     : "",
+										"data.description"  : "",
+										"data.isKey"        : 0, 
+										"data.pos"          : numberOfTableItems + 1 }});    
+              
+          
+          
+             gModel.refresh();
+             oTable.getBinding("items").refresh();
+             gModel.submitChanges();
+        
+            // now bind the created context 
+           // todo   oForm.setBindingContext(oContext);    
+       // var oModel = bindingContext.getModel();
+	   // var propertyPath = path + "/tablefields";
+			   
+
+			   
+			   /*
+			   
+			   that.contextCursoIniciativaEmpregadoASerCriada = that.getView().getModel().createEntry('/CursoIniciativaEmpregadoSet');
+                that.fragmentCriacaoDadosInicEmpregado.bindElement(that.contextCursoIniciativaEmpregadoASerCriada.sPath);
+                  that.fragmentCriacaoDadosInicEmpregado.open();
+			   
+			   */
+			   
+			   
+			   
+			   
+			   
+			 //  https://hxehost:51058/tablefields.xsodata/tables('YAA_2020112601_backward_sarimax_features_best_models')/tablefields
+             //  https://hxehost:51056/tablefields.xsodata/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')"
+          
     
 		 
 			   
-   var oTable =	this.getView().byId("lineItemsList");
-   var items = oTable.getItems(); // [i].getCells()[i].getText();
+// var oTable =	this.getView().byId("lineItemsList");
+  // var items = oTable.getItems(); // [i].getCells()[i].getText();
    // var noOfRecords = oTable.getItems().length;
     
    //

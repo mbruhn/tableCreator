@@ -88,7 +88,7 @@
 							</columns>
 							<dragDropConfig>
 								<dnd:DragDropBase enabled="{detailView>/uiEditable}"/>
-								<dnd:DragDropInfo
+								<dnd:DragDropInfo enabled="{detailView>/uiEditable}"
 									sourceAggregation="items"
 									targetAggregation="items"
                     				dropPosition="Between"
