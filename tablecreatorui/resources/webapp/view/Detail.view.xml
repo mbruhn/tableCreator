@@ -64,6 +64,7 @@
 								</Toolbar>
 							</headerToolbar>
 							<columns>
+								<Column width="50px"/>
 								<Column width="5%">
 									<Text text="{i18n>detailLineItemTablePosColumn}"/>
 								</Column>
@@ -98,6 +99,7 @@
 							<items>
 								<ColumnListItem>
 									<cells>
+										<Button enabled="{detailView>/uiEditable}" icon="sap-icon://delete" press="handleTableFieldDelete" type="Reject"/>
 										<ObjectIdentifier title="{data.pos}"/>
 										<CheckBox enabled="{detailView>/uiEditable}" selected="{path:'data.isAKey', formatter:'.formatter.fieldIsAKey2bool'}"/> 
 										<Input type="Text" placeholder="{i18n>detailLineItemTablePhFieldName}" value="{key.fieldName}" editable="{detailView>/uiEditable}"/>

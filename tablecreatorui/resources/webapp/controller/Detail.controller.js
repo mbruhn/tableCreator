@@ -30,7 +30,11 @@ sap.ui.define([
 				this.setModel(oViewModel, "detailView");
 
 				this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
+				
+
 			},
+
+		
 
 			onDrop : function (oInfo) {
 			// Dropping on the field list 
@@ -80,12 +84,36 @@ sap.ui.define([
                    
                    
                    // drag down
-                   // 1 to 3
+                   // dragged pos = 1  dropped pos = 3
                    /*
-                      1 A     -> 3     
-                      2 A     -> up - 1 
-                      3 A     -> up -1     
+                      1  sales_org  
+                      2  order_type
+                      3  model_run_time
+                      4  number_of_features
+
+                      
+                      if draggedup 3 -> 1
+                      1  sales_org        -> 2  +1 
+                      2  order_type       -> 3  +1 
+                      3  model_run_time   -> 1   swap
+                      4  number_of_features
+                      
+                      
+                      if draggeddown 1 -> 3 
+                      1  sales_org		    -> 3  swap 
+                      2  order_type         -> 1   -1 
+                      3  model_run_time     -> 2   -1 
+                      4  number_of_features -> 4 
+                   
+                   
+                   
                    */
+                   
+                   
+                   
+                   
+                   
+                   
                    
                    
                    
@@ -184,7 +212,7 @@ else if you have used sap.m.Table then try this:
            gModel.refresh();
            oTable.getBinding("items").refresh();
        
-           // todo : fire to the database
+          // todo : fire to the database
           // gModel.submitChanges();
    
            /*
@@ -269,6 +297,51 @@ items = items +" " + value.getCells()[0].getText();
 			/* =========================================================== */
 			/* event handlers                                              */
 			/* =========================================================== */
+
+
+    		// Create new field added - edit  
+			handleTableFieldDelete  : function (oEvent) {
+ 
+				var oTable = this.byId("lineItemsList");
+			    
+				var oViewModel = this.getModel("detailView"),
+			    	pressedButtonID = oEvent.getSource().getId(),
+			    	oBinding = this.byId("lineItemsList").getBinding("items");
+			    	
+			   
+			   
+				// Record in event 	
+				var deleteRecord = oEvent.getSource().getBindingContext().getObject();
+			
+				// todo: Fire odata delete record   	
+				var oModel = oEvent.getSource().getModel();
+	       
+	        	// path table + fieldname 
+	        	var spath = oEvent.getSource().getBindingContext().getPath();
+
+
+				oModel.setDeferredGroups(["group1"]);
+				
+				// setup field deletion
+				oModel.remove(oEvent.getSource().getBindingContext().getPath(), {
+					groupId: "group1",
+					success: function(data) {
+						// success handling
+            		},
+					error: function(e) {
+                		// error handling
+					}
+				});
+
+				// fire update, works
+				oModel.submitChanges({
+					groupId: "group1"
+				});
+				
+				
+			  	
+			},    	
+
 
     		// Create new field added - edit  
 			handleTableFieldAdd  : function (oEvent) {
@@ -370,12 +443,19 @@ items = items +" " + value.getCells()[0].getText();
      
      // /tables() / tablefienldæs 
      
-              gModel.createEntry(path + "/tablefields",{
+     /* Create entry */
+     
+     
+              /*POST only allowed on direct entitySets\"}}}"*/
+              // gModel.createEntry(path + "/tablefields",{
               //gModel.createEntry(path + "/tablefields",{
               	
-             // gModel.createEntry("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='zzaic')",{
+             
+             //Create entry TODO 
+             // (key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='zzaic')
+            var oContext = gModel.createEntry("/tablefields",{
 			      		properties: {	"key.tableName"     : sTableName,
-										"key.fieldname"     : "zzaic",
+										"key.fieldName"     : "",
 									    "data.dataLength"   : 0,
 										"data.dataScale"    : 0,
 										"data.dataType"     : "",
@@ -383,11 +463,39 @@ items = items +" " + value.getCells()[0].getText();
 										"data.isKey"        : 0, 
 										"data.pos"          : numberOfTableItems + 1 }});    
               
+           
+            //this.getView().unbindElement();
+            //this.getView().setBindingContext(oContext);
+            //   oTable.unbindElement();
+            //   oTable.setBindingContext(oContext); 
+              
+            // var oSorter = new sap.ui.model.Sorter(“ID”);
+             
+            // oTable.bindRows("items");
+              
+                        // SUBMIT CHANGES  
+            gModel.submitChanges();  
+              
+              
+            //oTable.setBindingContext(gModel);
+            // Check if created 
+            // oTable.getItems().length;
+            
+              /*Trying to do an update of the entry */
+             /*
+             var oSingleTableRow = gModel.getProperty(oTableItems[1].getBindingContext().getPath());
+             Set data.description = */
+         
+           //bindingContext.getModel().setProperty("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='sales_org')/data.description", "TestUI5");
+         // bindingContext.getModel().setProperty("/tablefields(key.tableName='YAA_2020112601_backward_sarimax_features_best_models',key.fieldName='aic')/data.dataLength", 25);     
+     
           
           
-             gModel.refresh();
-             oTable.getBinding("items").refresh();
-             gModel.submitChanges();
+            // gModel.refresh();
+            // oTable.getBinding("items").refresh();
+            // SUBMIT CHANGES  
+            // gModel.submitChanges();
+             
         
             // now bind the created context 
            // todo   oForm.setBindingContext(oContext);    
@@ -556,6 +664,34 @@ items = items +" " + value.getCells()[0].getText();
 				// Edit pressed 
 				if (pressedButtonID.includes("detail--detailsEdit")) {
 					//MessageToast.show("Pressed: " + pressedButtonID);
+					
+						// oViewModel		oModel	
+						
+						// var oBinding = this.byId("list").getBinding("items");
+						
+						// oBinding.oModel.read("/tables('ZZ123')/tableAcls",
+				       var curModel = this.byId("lineItemsList").getBinding("items").oModel;
+					
+					   var FirmaModel = new sap.ui.model.odata.ODataModel("/tablefields.xsodata", true);
+					   var oModelJsonACL = new sap.ui.model.json.JSONModel();
+					   //sap.ui.getCore().getModel("oModelJsonACL"); 
+					   // sap.ui.getCore().getModel("oModelJsonACL").oData.results[0]["key.teamID"]
+					//sap.app.oDataModel.read()	  
+						FirmaModel.read("/tables('ZZ123')/tableAcls", 
+						{
+							success: function(oData) {
+        					// save variable  
+        				    oModelJsonACL.setData(oData);
+        				    sap.ui.getCore().setModel(oModelJsonACL, "oModelJsonACL");
+        				    
+        					jQuery.sap.log.error("DONE");},
+    						error: function(oError) {
+        					// show error
+        					jQuery.sap.log.error("Error"  + error);}
+						});
+
+					
+					
 					// Toggle edit mode
 					if (oViewModel.getProperty("/uiEditable") === true) {
 						oViewModel.setProperty("/uiEditable", false);
@@ -679,8 +815,18 @@ items = items +" " + value.getCells()[0].getText();
 					}
 				});
 			},
-
+			
+			
+            /*
+                Binding changes i.e table select 
+            
+            */
 			_onBindingChange : function () {
+				
+				 // alert("_onBindingChange function called");
+				
+				
+				
 				var oView = this.getView(),
 					oElementBinding = oView.getElementBinding();
 
@@ -706,6 +852,58 @@ items = items +" " + value.getCells()[0].getText();
 					oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
 				oViewModel.setProperty("/shareSendEmailMessage",
 					oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+
+ 
+					/*Instantiate a jsonmodel for ACL on */
+				var oAclTable  = this.byId("aclItemsList"),
+			        oBinding = this.byId("aclItemsList").getBinding("items");
+			        
+			     var bindingContext = this.getView().getBindingContext();
+				
+				/*var path = bindingContext.getPath(); */
+				
+			    var propertyPath = sPath + "/tableAcls";
+				
+				
+				var oModelJsonACL = new sap.ui.model.json.JSONModel();
+				/*Fill with modeldata */
+				
+		/*		oViewModel.read(propertyPath, {
+					success: function(oData) {
+						oModelJsonACL.setData(oData);
+				
+		      		oAclTable.setModel(oModelJsonACL);
+                // oAclTable.bindItems("/results", oRow);
+                		sap.ui.getCore().setModel(oModelJsonACL, "oModelJsonACL");
+               }
+            }).catch(function (error) { jQuery.sap.log.error("Error"  + error); });
+          */
+   // jQuery.sap.log.error("HELLOOO");
+ 
+
+
+
+/*
+).catch(function () {
+     console.log("Promise Rejected");
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+ 
+
 			},
 
 			_onMetadataLoaded : function () {

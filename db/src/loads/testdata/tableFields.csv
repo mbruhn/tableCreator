@@ -1,5 +1,5 @@
 key.tableName,key.fieldName,data.pos,data.isAKey,data.description,data.dataType,data.dataLength,data.dataScale
-YAA_Global,company_code,1,0,,VARCHAR,255,
+YAA_Global,company_code,1,0,,VARCHAR,250,
 YAA_Global,country_code,2,0,,VARCHAR,255,
 YAA_Global,country_text,3,0,,VARCHAR,255,
 YAA_Global,currency,4,0,,VARCHAR,255,
